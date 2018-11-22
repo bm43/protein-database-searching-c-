@@ -1,77 +1,164 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 using namespace std;
 /*
+struct proteinProperties{
+
+}data;
+*/
 class load {
-	protected:
-		string p_id;
-		string gi;
-		string ref;
-		string keyword;
-		string line;
+
+	protected://what the user inputs
+	string p_id;
+	string gi;
+	string ref;
+	string keyword;
+	string line[200];
+	int ui;
 	public:
-		void loadfile(string filename){
+		void secondcase(string filename){
+			
+			cout<<"secondcase\n";
+			cout<<"Select one:\n1. Description of the protein\n2. Protein sequence\n3. Protein statistics\n4. Record protein to file\n5. Return to main menu\n";
+			cin>>ui;
+			switch(ui)
+			{
+				case 6:
+					firstcase(filename);
+					break;
+				default:
+				cout<<"?\n";
+			}
+		}
+		void firstcase(string filename){
+			cout<<"firstcase\n";
+			int b;char c;int n;
+			cout<<"1. Overview of the database\nOr search by:\n2. protein id\n3. gi id\n4. ref id\n5. keyword\n6. Quit database\n";
+			cin>>ui;
 
-			cout<<"Search by:\n1. Overview of the database\n2. protein id\n3. gi id\n4. ref id\n5. keyword\n6. Quit database\n";
-			int b;
-			cin>>b;
-			switch(b){
+			switch(ui){
+
 				case 1:
-					cout<<"\n";//huge chunk of text about database
-					loadfile(filename);
+					cout<<"The proteins in the database are from GenBank(R)\nTotal number of proteins in the database:"<<n<<endl;
+					cout<<"Amino acids are represented by the following characters:\nA alanine P proline\nB aspartate/asparagine Q glutamine\nC cystine R arginine\nD aspartate S serine\nE glutamate T threonine\nF phenylalanine U selenocysteine\nG glycine V valine\nH histidine W tryptophan\nI isoleucine Y tyrosine\nK lysine Z glutamate/glutamine\nL leucine X any\nM methionine * translation stop\nN asparagine - gap of indeterminate length\n";
+					firstcase(filename);
 					break;
-				case 2:
-					cout<<"enter item id: ";
-					cin>>p_id;
 
-					//
+				case 2:
+					cout<<"enter protein id: ";
+					cin>>p_id;//gets what the user wants to find
+					ifstream file;
+					file.open(filename);//opens file
+					//search through file for the same string
+					if(file.is_open()){
+						int offset;
+						offset = line.find(p_id,0);//reads through file lines one by one
+						//some_string.find('a') will EITHER return the position of the first appearance
+						// of 'a' in some_string if 'a' appears at least once in some_string,
+						//OR it will return a value that is equal to std::string::npos
+						//if 'a' does not appear at all in some_string.
+						while(!file.eof()){//till the end of file
+							getline(file,line);
+							if(offset!=string::npos){
+								//couts description of the protein
+								cout<<"Protein details:\n";
+								//+cout protein id, gi, ref, keyword
+							}
+						}
+						file.close();
+					}
+					else{cout<<"couldn't open file\n";}
+					//then returns to options
+					firstcase(filename);
 					break;
+
 				case 3:
 					cout<<"enter gi id: ";
 					cin>>gi;
-					//
+					ifstream file;
+					file.open(filename);
+					if(file.is_open()){
+						int offset;
+						offset = line.find(gi,0);
+						while(!file.eof()){
+							getline(file,line);
+							if(offset!=string::npos){
+								cout<<"Protein details:\n";
+								//
+							}
+						}
+						file.close();
+					}
+					firstcase(filename);
 					break;
+
 				case 4:
 					cout<<"enter ref id: ";
 					cin>>ref;
-					//
+					ifstream file;
+					file.open(filename);
+					if(file.is_open()){
+						int offset;
+						offset = line.find(ref,0);
+						while(!file.eof()){
+							getline(file,line);
+							if(offset!=string::npos){
+								cout<<"Protein details:\n";
+							
+							}
+						}
+						file.close();
+					}
+					firstcase(filename);
 					break;
+
 				case 5:
 					cout<<"enter keyword: ";
 					cin>>keyword;
-					//
-				case 6:
-					cout<<"*Quit database*\n";
-					myfile.close();
+					ifstream file;
+					file.open(filename);
+					if(file.is_open()){
+						int offset;
+						offset = line.find(keyword,0);
+						while(!file.eof()){
+							getline(file,line);
+							if(offset!=string::npos){
+								cout<<"Protein details:\n";
+							}
+						}
+						file.close();
+					}
+					firstcase(filename);
 					break;
-					return;
+
+				case 6:
+					cout<<"*Quits database*\n";
+					break;
+
 				default:
-					cout<<"";
-					loadfile(filename);
+					break;
+					firstcase(filename);
 		}
-		return;
 	}
 };
 
-
-class child:public load{
-public:
-
-
-};
-
-int main(int agrc, char **argv){
+int main(){
 		int a;
 		load obj;
 		cout<<"Select option:\n1) Load the abridged protein data\n"<<"2) Load the complete protein data\n"<<"3) Quit database\n";
 		cin>>a;
 		switch(a){
 			case 1:
-				obj.loadfile("protein_a.fa");
+				obj.firstcase("protein_a.fa");
 				break;
 
 			case 2:
-				obj.loadfile("protein_c.fa");
+				obj.firstcase("protein_c.fa");
 				break;
 
 			case 3:
@@ -82,58 +169,4 @@ int main(int agrc, char **argv){
 				break;
 		}
 return 0;
-}
-*/
-/*
-int main( int argc, char **argv ){
-	cout<<argc<<endl<<argv<<endl;
-		if( argc < 1 ){
-        cerr << "Usage: "<<argv[0]<<" [infile]" << endl;
-				cout<<argv[0];
-        return -1;
-    }
-
-    ifstream input(argv[1]);
-    if(!input.good()){
-        cerr << "Error opening '"<<argv[1]<<"'. Bailing out." << endl;
-        return -1;
-    }
-
-    string line, name, content;
-    while( getline( input, line ).good() ){
-        if( line.empty() || line[0] == '>' ){ // Identifier marker
-            if( !name.empty() ){ // Print out what we read from the last entry
-                cout << name << " : " << content << endl;
-                name.clear();
-            }
-            if( !line.empty() ){
-                name = line.substr(1);
-            }
-            content.clear();
-        } else if( !name.empty() ){
-            if( line.find(' ') != string::npos ){ // Invalid sequence--no spaces allowed
-                name.clear();
-                content.clear();
-            } else {
-                content += line;
-            }
-        }
-    }
-    if( !name.empty() ){ // Print out what we read from the last entry
-        cout << name << " : " << content << endl;
-    }
-
-    return 0;
-}
-*/
-
-int main(int argc, char **argv)
-{
-	cout << "You have entered " << argc
-		<< " arguments:" << "\n";
-
-	for (int i = 0; i < argc; ++i)
-		cout << argv[i] << "\n";
-
-	return 0;
 }
